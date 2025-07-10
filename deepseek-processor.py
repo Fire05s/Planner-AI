@@ -1,7 +1,7 @@
 import requests
 
-# TODO: OBSCURE
-API_KEY = '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'
+
+API_KEY = 'KEY'
 
 
 class APIException(Exception):
