@@ -1,1 +1,1 @@
-# Planner-GPT
+# Planner-AI
