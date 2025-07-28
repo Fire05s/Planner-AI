@@ -1,21 +1,34 @@
+"""
+Module to ask DeepSeek about the ideal order of Tasks and their splits.
+"""
+
+
+
 import requests
 
 class APIException(Exception):
-    # exception for calls related to DeepSeek's API
+    """
+    Exceptions for calls related to DeepSeek's API
+    """
     pass
 
 
 def ask_model(api_key: str, query: str) -> str | None:
-    # given the user's API key and query, get DeepSeek's response
+    """
+    Given an API Key and a formatted Task string query, ask the model for a plan to tackle all the tasks.
+    
+    Given this plan, return the result which should be a formatted sequence of tasks.
+    """
+
     API_URL = 'https://openrouter.ai/api/v1/chat/completions'
 
-    # define the headers for the API request
+    # Define the headers for the API request
     headers = {
         'Authorization': f'Bearer {api_key}',
         'Content-Type': 'application/json'
     }
 
-    # initialize the data sent to DeepSeek
+    # Initialize the data sent to DeepSeek
     data = {
         "model": "deepseek/deepseek-chat:free",
         "messages":[{"role": "system", "content": "You are an AI planner helper that, given a list of tasks and/or events and their details, "
@@ -24,7 +37,7 @@ def ask_model(api_key: str, query: str) -> str | None:
                                                     "A task will be given in the following format:\n"
 
                                                     "TASK [Name or NONE] DUE [DD] [MM] [YYYY] DESC [Description or "
-                                                    "NONE] PARTS [Number of parts that this task should be split into or NONE]\n\n"
+                                                    "NONE] PARTS [Number of parts that this task should be split into, which is at least 1]\n\n"
 
 
                                                     "Return the ideal schedule in a space separated list within the following format:\n"
@@ -50,14 +63,15 @@ def ask_model(api_key: str, query: str) -> str | None:
 
                                                     "Here's an example, assuming that today is January 1, 2000:\n"
 
-                                                    "Input: TASK Math Homework DUE 08 01 2000 DESC NONE PARTS NONE\n"
+                                                    "Input: TASK Math Homework DUE 08 01 2000 DESC NONE PARTS 1\n"
                                                     
                                                     "Output: TASK Math Homework DATE 01 01 2000 DESC NONE PARTS 1 1\n"
 
                                                     "Explanation: Because a task name was already given, we use that task name. Because today "
                                                     "is January 1, 2000, the due date for Math Homework is January 8, 2000, and because we have "
                                                     "no other tasks queued up, we assign this task to be completed today so as not to "
-                                                    "procrastinate.\n\n"
+                                                    "procrastinate. Since there are no extra parts to split this task up into, we simply return "
+                                                    "a part number of 1 with a total number of parts of 1.\n\n"
 
 
                                                     "Here's another example, once again assuming that today is January 1, 2000:\n"
@@ -106,10 +120,10 @@ def ask_model(api_key: str, query: str) -> str | None:
                     {"role": "user", "content": query}]
     }
 
-    # send the data to DeepSeek
+    # Send the data to DeepSeek
     response = requests.post(API_URL, json = data, headers = headers)
 
-    # return the response if the API call succeeded; otherwise, raise an exception
+    # Return the response if the API call succeeded; otherwise, raise an exception
     if response.status_code == 200:
         return response.json()["choices"][0]["message"]["content"]
     else:
