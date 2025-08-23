@@ -1,4 +1,6 @@
 import unittest
+
+# to allow easy test running in VSCode
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
