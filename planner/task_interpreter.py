@@ -13,6 +13,12 @@ class CreateTaskException(Exception):
     """
     pass
 
+class TasktoLineException(Exception):
+    """
+    Exceptions for converting a Task to a Line.
+    """
+    pass
+
 class TaskInterpreterException(Exception):
     """
     Exceptions when interpreting a Task.
@@ -77,9 +83,14 @@ def input_tasks_to_lines(task_list: list[InputTask]) -> str:
 
     Used for sending one or multiple InputTask objects to the AI in InputTask string format.
     """
+    if not isinstance(task_list, list):
+        raise TasktoLineException("Input Task list is not a list.")
+
     result = ""
     for task in task_list:
-        if result == "":
+        if not isinstance(task, Task):
+            raise TasktoLineException("Object in list is not a Task.")
+        elif result == "":
             result = str(task)
         else:
             result += ' ' + str(task)
@@ -91,7 +102,7 @@ def params_to_output_task(name: str, day: str, month: str, year: str, desc: str,
     """
     Given a Task's name, assigned date (day, month, and year), description, and parts, create an OutputTask object.
 
-    Can be used for taking user inputs from the Planner and creating OutputTask objects to send to the AI.
+    Can be used for taking output parameters from the AI and creating processable OutputTask objects.
     """
     # Error handling
     nameExc = not isinstance(name, str)
@@ -148,7 +159,7 @@ def line_to_output_task(line: str) -> OutputTask:
     """
     Given a single line for a Task, create an OutputTask object.
 
-    Used for breaking down individual lines from a Task string output and converting them into an OutputTask object.
+    Used for breaking down individual lines from an OutputTask string output and converting them into an OutputTask object.
     """
     if not isinstance(line, str):
         raise TaskInterpreterException("Input line is not a string.")
@@ -158,6 +169,10 @@ def line_to_output_task(line: str) -> OutputTask:
     line_list = line.split()
     active_state = "NONE"
     data = {"NAME": "", "DAY": "", "MONTH": "", "YEAR": "", "DESC": "", "PART_NUM": "", "TOTAL_PARTS": ""}
+
+    if "TASK" not in line_list or "DUE" not in line_list or "DESC" not in line_list or "PARTS" not in line_list:
+        raise TaskInterpreterException("All required parameters not given to create an OutputTask.")
+
     for word in line_list:
         if word == "TASK" or word == "DUE" or word == "DESC" or word == "PARTS":
             # Found keyword -> change processed parameter
@@ -199,12 +214,15 @@ def lines_to_output_tasks(lines: str) -> list[OutputTask]:
 
     Used for taking a complete OutputTask string input and converting them into a list of OutputTask objects.
     """
+    if not isinstance(lines, str):
+        raise CreateTaskException("Lines of OutputTasks input are not in a string.")
+
     lines_list = lines.split()
     line = ""
     output_tasks = []
     for word in lines_list:
         if word == "TASK":
-            # Add the new OutputTask if a line has been extracted
+            # Add the new OutputTask if a line has been compiled
             if line != "":
                 output_tasks.append(line_to_output_task(line))
             # Reset the extracted line
@@ -217,4 +235,5 @@ def lines_to_output_tasks(lines: str) -> list[OutputTask]:
 
     return output_tasks
 
-__all__ = [params_to_input_task.__name__, input_tasks_to_lines.__name__, params_to_output_task.__name__, line_to_output_task.__name__, lines_to_output_tasks.__name__]
+__all__ = [params_to_input_task.__name__, input_tasks_to_lines.__name__, params_to_output_task.__name__, line_to_output_task.__name__, 
+        lines_to_output_tasks.__name__, CreateTaskException.__name__, TasktoLineException.__name__, TaskInterpreterException.__name__]

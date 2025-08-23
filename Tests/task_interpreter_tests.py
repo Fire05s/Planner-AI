@@ -1,4 +1,6 @@
 import unittest
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from planner.task_interpreter import *
 
@@ -67,16 +69,90 @@ class InterpreterTests(unittest.TestCase):
         test3 = line_to_output_task(self.output_task3)
         self.assertEqual(str(test3), self.output_task3)
 
-    def test_lines_to_task(self):
+    def test_lines_to_output_tasks(self):
         """
         Testing if multiple OutputTask lines are accurately converted into a list of OutputTask objects.
         """
         test_list = lines_to_output_tasks(self.all_output_tasks)
-        print('output task list', test_list)
         self.assertEqual(str(test_list[0]), self.output_task1)
         self.assertEqual(str(test_list[1]), self.output_task2)
         self.assertEqual(str(test_list[2]), self.output_task3)
 
+    def test_error_params_to_input_task(self):
+        """
+        Testing if manually inserting wrong parameters to create an InputTask raises an error.
+        """
+        with self.assertRaises(CreateTaskException):
+            params_to_input_task(1, "01", "01", "2000", "NONE", "1")
+        with self.assertRaises(CreateTaskException):
+            params_to_input_task("TEST", "AB", "01", "2000", "NONE", "1")
+        with self.assertRaises(CreateTaskException):
+            params_to_input_task("TEST", "01", "AB", "2000", "NONE", "1")
+        with self.assertRaises(CreateTaskException):
+            params_to_input_task("TEST", "01", "01", "ABCD", "NONE", "1")
+        with self.assertRaises(CreateTaskException):
+            params_to_input_task("TEST", "01", "01", "2000", 1, "1")
+        with self.assertRaises(CreateTaskException):
+            params_to_input_task("TEST", "01", "01", "2000", "NONE", "A")
+
+    def test_error_tasks_to_lines(self):
+        """
+        Testing if attempting to convert a non-list of Tasks or a list of non-Tasks to lines raises an error.
+        """
+        with self.assertRaises(TasktoLineException):
+            input_tasks_to_lines("NOT A LIST")
+        with self.assertRaises(TasktoLineException):
+            test1 = params_to_input_task("Project 1", "26", "07", "2025", "NONE", "4")
+            test2 = params_to_input_task("NONE", "20", "07", "2025", "Hello", "1")
+            test3 = params_to_input_task("Meeting", "23", "07", "2025", "Multiple Words", "1")
+            input_tasks_to_lines([test1, test2, test3, "NOT A TASK"])
+
+    def test_error_params_to_output_task(self):
+        """
+        Testing if manually inserting wrong parameters to create an OutputTask raises an error.
+        """
+        with self.assertRaises(CreateTaskException):
+            params_to_output_task(1, "01", "01", "2000", "NONE", "1", "2")
+        with self.assertRaises(CreateTaskException):
+            params_to_output_task("TEST", "AB", "01", "2000", "NONE", "1", "2")
+        with self.assertRaises(CreateTaskException):
+            params_to_output_task("TEST", "01", "AB", "2000", "NONE", "1", "2")
+        with self.assertRaises(CreateTaskException):
+            params_to_output_task("TEST", "01", "01", "ABCD", "NONE", "1", "2")
+        with self.assertRaises(CreateTaskException):
+            params_to_output_task("TEST", "01", "01", "2000", 1, "1", "2")
+        with self.assertRaises(CreateTaskException):
+            params_to_output_task("TEST", "01", "01", "2000", "NONE", "1", "A")
+
+    def test_error_line_to_output_task(self):
+        """
+        Testing if invalid formats of OutputTask lines properly raise errors.
+        """
+        # "TASK TEST DUE 01 01 2000 DESC NONE PARTS 1 2"
+        # missing keywords
+        with self.assertRaises(TaskInterpreterException):
+            line_to_output_task("DUE 01 01 2000 DESC NONE PARTS 1 2")
+        with self.assertRaises(TaskInterpreterException):
+            line_to_output_task("TASK TEST DESC NONE PARTS 1 2")
+        with self.assertRaises(TaskInterpreterException):
+            line_to_output_task("TASK TEST DUE 01 01 2000 PARTS 1 2")
+        with self.assertRaises(TaskInterpreterException):
+            line_to_output_task("TASK TEST DUE 01 01 2000 DESC NONE")
+
+        # invalid date
+        with self.assertRaises(TaskInterpreterException):
+            line_to_output_task("TASK TEST DUE 01 01 2000 1234 DESC NONE PARTS 1 2")
+
+        # invalid parts format
+        with self.assertRaises(TaskInterpreterException):
+            line_to_output_task("TASK TEST DUE 01 01 2000 1234 DESC NONE PARTS 1 2 3")
+
+    def test_error_lines_to_output_tasks(self):
+        """
+        Testing if non-string lines of OutputTasks accurately raises an error.
+        """
+        with self.assertRaises(CreateTaskException):
+            lines_to_output_tasks([self.output_task1, self.output_task2, self.output_task3])
 
 
 if __name__ == "__main__":
