@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+        <style>
+            html,body {
+                height: 100%;
+            }
+        </style>
+        <title>Home</title>
+    </head>
+    <body>
+        <div>
+            <h1>Planner AI</h1>
+        </div>
+
+        <br>
+
+        <div>
+            <h3>Welcome to Planner AI!</h3>
+            <p>Your one stop shop to sorting out your schedule in the most efficient way possible!</p>
+        </div>
+
+        <br>
+
+        <div>
+            <h5>Add a task to be scheduled.</h5>
+            <button type = 'button' data-bs-toggle="modal" data-bs-target="#addTaskModal">Add Task</button>
+        </div>
+
+        <form class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addTaskModalLabel">Add Task</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method='post'>
+                            <div>
+                                <label for='addName'>Task Name: </label>
+                                <input name='addName' id='addName' required>
+                            </div>
+                            <br>
+                            <div>
+                                <label for='addDate'>Due Date: </label>
+                                <input type='date' id='addDate' name='addDate' required>
+                            </div>
+                            <br>
+                            <div>
+                                <label for='addDesc'>Description: </label>
+                                <input name='addDesc' id='addDesc'>
+                            </div>
+                            <br>
+                            <div>
+                                <label for='addParts'>Parts: </label>
+                                <input name='addParts' id='addParts'>
+                            </div>
+                            <br>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" name='addSubmit'>Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <form>
+            <p>Choose an option:</p>
+            <label>
+                <input type="radio" name="option" value="option1" id="radio1"> Option 1
+            </label>
+            <label>
+                <input type="radio" name="option" value="option2" id="radio2"> Option 2
+            </label>
+
+            <div id="option1-details" style="display: none;">
+                <label for="input1">Input for Option 1:</label>
+                <input type="text" id="input1" name="input1">
+            </div>
+
+            <div id="option2-details" style="display: none;">
+                <label for="input2">Input for Option 2:</label>
+                <input type="text" id="input2" name="input2">
+                <label for="input3">Another input for Option 2:</label>
+                <input type="text" id="input3" name="input3">
+            </div>
+        </form>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+    </body>
+</html>
