@@ -46,10 +46,14 @@
                             <div>
                                 <label for='addName'>Task Name</label>
                                 <br>
+                                <label for='addName'>Task Name</label>
+                                <br>
                                 <input name='addName' id='addName' required>
                             </div>
                             <br>
                             <div>
+                                <label for='addDate'>Due Date</label>
+                                <br>
                                 <label for='addDate'>Due Date</label>
                                 <br>
                                 <input type='date' id='addDate' name='addDate' required>
@@ -58,10 +62,23 @@
                             <div>
                                 <label for='addDesc'>Description</label>
                                 <br>
+                                <label for='addDesc'>Description</label>
+                                <br>
                                 <input name='addDesc' id='addDesc'>
                             </div>
                             <br>
                             <div>
+                                <p>Does your task have multiple parts?</p>
+                                <label>
+                                    <input type="radio" name="option" value="option1" id="yesParts" required> Yes
+                                </label>
+                                <label>
+                                    <input type="radio" name="option" value="option2" id="noParts" required> No
+                                </label>
+                                <div id="yes-details" style="display: none;">
+                                    <label for='addParts'>Parts: </label>
+                                    <input type='number' name='addParts' id='addParts'>
+                                </div>
                                 <p>Does your task have multiple parts?</p>
                                 <label>
                                     <input type="radio" name="option" value="option1" id="yesParts" required> Yes
