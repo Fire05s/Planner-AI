@@ -33,10 +33,10 @@
         </div>
 
         <!-- Modal to Add a Task -->
-        <div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskModalLabel" aria-hidden="true">
+        <div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskModalLabel">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form method="POST" action="/">
+                    <form id="addTaskForm" method="POST" action="/">
                         <div class="modal-header">
                             <h5 class="modal-title" id="addTaskModalLabel">Add Task</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -88,23 +88,7 @@
 
 
 
-        <script>
-            // Expanding Parts menu script
-            const yesRadio = document.getElementById("yesParts");
-            const noRadio = document.getElementById("noParts");
-            const yesDetails = document.getElementById("yes-details");
-            const partsInput = document.getElementById("addParts");
-
-            function updateVisibility() {
-                yesDetails.style.display = yesRadio.checked ? "block" : "none";
-                partsInput.value = 1;
-            }
-
-            yesRadio.addEventListener("change", updateVisibility);
-            noRadio.addEventListener("change", updateVisibility);
-        </script>
-
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-
+        <script src="{{ url_for('static', filename='index_script.js') }}"></script>
     </body>
 </html>
